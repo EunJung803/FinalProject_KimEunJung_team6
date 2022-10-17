@@ -53,6 +53,7 @@
                     if ( form.password.value != form.passwordConfirm.value ) {
                         warningModal("입력하신 비밀번호와 일치하게 입력해주세요.");
                         form.password.focus();
+
                         return;
                     }
 
@@ -61,7 +62,6 @@
                     MemberJoin__submitDone = true;
                 }
             </script>
-
 
             <form th:action method="POST" class="flex flex-col gap-3"
                   onsubmit="MemberJoin__submit(this); return false;">
