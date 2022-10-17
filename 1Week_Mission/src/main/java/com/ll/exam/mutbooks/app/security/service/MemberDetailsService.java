@@ -24,6 +24,11 @@ public class MemberDetailsService implements UserDetailsService {
         Member member = memberRepository.findByUsername(username).get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if (member.getAuthLevel() == 7) {   // authLevel 의 값이 7이면 관리자의 역할
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        }
+
         authorities.add(new SimpleGrantedAuthority("MEMBER"));
 
         return new MemberContext(member, authorities);

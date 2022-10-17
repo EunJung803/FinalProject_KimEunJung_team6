@@ -22,10 +22,13 @@ public class MemberService {
             throw new AlreadyJoinException();
         }
 
+        int authLevel = 3;  // 일반 회원
+
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .email(email)
+                .authLevel(authLevel)
                 .build();
 
         memberRepository.save(member);
