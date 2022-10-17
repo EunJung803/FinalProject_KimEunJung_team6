@@ -25,7 +25,7 @@ spring:
 logging:
   level:
     root: info
-    com.ll.exam.mutbooks: debug
+    com.ll.exam.mutbooks.app: debug
     org.hibernate.type.descriptor.sql: trace
 custom:
   site:
