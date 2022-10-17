@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -61,5 +62,25 @@ public class MemberController {
         memberService.modify(member, email, nickname);
 
         return "redirect:/member/modify?msg=" + Ut.url.encode("회원정보수정이 완료되었습니다.");
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modifyPassword")
+    public String modifyPassword() {
+        return "member/modifyPassword";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modifyPassword")
+    public String modifyPassword(@AuthenticationPrincipal MemberContext memberContext, String oldPassword, String newPassword) {
+        Member member = memberService.findByUserId(memberContext.getId());
+
+        if (!memberService.passwordCheck(member, oldPassword)) {
+            return "redirect:/member/modifyPassword?errorMsg=" + Ut.url.encode("비밀번호가 일치하지 않습니다.");
+        }
+
+        memberService.modifyPassword(member, newPassword);
+
+        return "redirect:/member/modifyPassword?msg=" + Ut.url.encode("비밀번호 변경이 완료되었습니다.");
     }
 }

@@ -52,4 +52,19 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+    public boolean passwordCheck(Member member, String oldPassword) {
+        if (passwordEncoder.matches(oldPassword, member.getPassword())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void modifyPassword(Member member, String newPassword) {
+        member.setPassword(passwordEncoder.encode(newPassword));
+
+        memberRepository.save(member);
+    }
 }
