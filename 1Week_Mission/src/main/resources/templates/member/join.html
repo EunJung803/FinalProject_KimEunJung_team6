@@ -38,21 +38,27 @@
                         return;
                     }
 
+                    form.passwordConfirm.value = form.passwordConfirm.value.trim();
+
+                    if ( form.password.value != form.passwordConfirm.value ) {
+                        warningModal("입력하신 비밀번호와 일치하게 입력해주세요.");
+                        form.passwordConfirm.focus();
+
+                        return;
+                    }
+
+                    if (form.passwordConfirm.value.length == 0) {
+                        warningModal("비밀번호 확인을 입력해주세요.");
+                        form.password.focus();
+
+                        return;
+                    }
+
                     form.email.value = form.email.value.trim();
 
                     if (form.email.value.length == 0) {
                         warningModal("이메일을 입력해주세요.");
                         form.email.focus();
-
-                        return;
-                    }
-
-                    form.password.value = form.password.value.trim();
-                    form.passwordConfirm.value = form.passwordConfirm.value.trim();
-
-                    if ( form.password.value != form.passwordConfirm.value ) {
-                        warningModal("입력하신 비밀번호와 일치하게 입력해주세요.");
-                        form.password.focus();
 
                         return;
                     }
