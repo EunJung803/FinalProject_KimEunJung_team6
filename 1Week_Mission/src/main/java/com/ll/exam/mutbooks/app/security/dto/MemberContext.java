@@ -42,4 +42,12 @@ public class MemberContext extends User {
     public String getName() {
         return getUsername();
     }
+
+    public boolean memberIsAuthor(Member member) {
+        return id.equals(member.getId());
+    }
+
+    public boolean memberIsNotAuthor(Member member) {
+        return memberIsAuthor(member) == false;
+    }
 }
