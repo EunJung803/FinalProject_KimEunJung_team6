@@ -4,7 +4,7 @@ import com.ll.exam.mutbooks.app.member.entity.Member;
 import com.ll.exam.mutbooks.app.member.form.JoinForm;
 import com.ll.exam.mutbooks.app.member.service.MemberService;
 import com.ll.exam.mutbooks.app.security.dto.MemberContext;
-import com.ll.exam.mutbooks.app.util.Ut;
+import com.ll.exam.mutbooks.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

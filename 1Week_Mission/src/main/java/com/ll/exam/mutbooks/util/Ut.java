@@ -1,4 +1,4 @@
-package com.ll.exam.mutbooks.app.util;
+package com.ll.exam.mutbooks.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

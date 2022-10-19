@@ -1,6 +1,6 @@
 package com.ll.exam.mutbooks.app.security.handler;
 
-import com.ll.exam.mutbooks.app.util.Ut;
+import com.ll.exam.mutbooks.util.Ut;
 import org.springframework.security.core.AuthenticationException;
         import org.springframework.security.web.DefaultRedirectStrategy;
         import org.springframework.security.web.RedirectStrategy;

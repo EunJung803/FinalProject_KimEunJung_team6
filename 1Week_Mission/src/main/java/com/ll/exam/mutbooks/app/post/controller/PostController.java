@@ -4,7 +4,7 @@ import com.ll.exam.mutbooks.app.post.entity.Post;
 import com.ll.exam.mutbooks.app.post.form.PostForm;
 import com.ll.exam.mutbooks.app.post.service.PostService;
 import com.ll.exam.mutbooks.app.security.dto.MemberContext;
-import com.ll.exam.mutbooks.app.util.Ut;
+import com.ll.exam.mutbooks.util.Ut;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
