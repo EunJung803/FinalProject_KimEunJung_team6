@@ -3,7 +3,6 @@ package com.ll.exam.mutbooks.app.member.service;
 import com.ll.exam.mutbooks.app.member.entity.Member;
 import com.ll.exam.mutbooks.app.member.exception.AlreadyJoinException;
 import com.ll.exam.mutbooks.app.member.repository.MemberRepository;
-import com.ll.exam.mutbooks.app.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -66,5 +65,9 @@ public class MemberService {
         member.setPassword(passwordEncoder.encode(newPassword));
 
         memberRepository.save(member);
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 }

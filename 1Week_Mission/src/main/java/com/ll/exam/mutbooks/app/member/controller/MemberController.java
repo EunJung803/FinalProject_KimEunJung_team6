@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -82,5 +82,23 @@ public class MemberController {
         memberService.modifyPassword(member, newPassword);
 
         return "redirect:/member/modifyPassword?msg=" + Ut.url.encode("비밀번호 변경이 완료되었습니다.");
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/findUsername")
+    public String findUsername() {
+        return "member/findUsername";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findUsername")
+    public String findUsername(String email) {
+        Optional<Member> memberUsername = memberService.findByEmail(email);
+
+        if (memberUsername.isEmpty()) {
+            return "redirect:/member/findUsername?errorMsg=" + Ut.url.encode("존재하지 않는 이메일 입니다.");
+        }
+
+        return "redirect:/member/findUsername?msg=" + Ut.url.encode("회원님의 아이디는 " + memberUsername.get().getUsername() + " 입니다.");
     }
 }
