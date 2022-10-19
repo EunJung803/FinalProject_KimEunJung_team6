@@ -66,7 +66,7 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/modify")
-    public String modify(@AuthenticationPrincipal MemberContext memberContext, Model model, @PathVariable Long id, @Valid PostForm postForm) {
+    public String modify(@AuthenticationPrincipal MemberContext memberContext, @PathVariable Long id, @Valid PostForm postForm) {
         Post post = postService.getPostById(id);
 
         if (memberContext.memberIsNotAuthor(post.getAuthor())) {
@@ -78,4 +78,21 @@ public class PostController {
         String msg = Ut.url.encode("%d번 게시물이 수정되었습니다.".formatted(id));
         return "redirect:/post/%d?msg=%s".formatted(id, msg);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/delete")
+    public String delete(@AuthenticationPrincipal MemberContext memberContext, @PathVariable Long id) {
+        Post post = postService.getPostById(id);
+
+        if (memberContext.memberIsNotAuthor(post.getAuthor())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        postService.delete(post);
+
+        String msg = Ut.url.encode("%d번 게시물이 삭제되었습니다.".formatted(id));
+        return "redirect:/post/list?msg=%s".formatted(msg);
+    }
+
+    // ToDo : GET /post/list
 }
