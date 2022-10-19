@@ -23,6 +23,7 @@ public class Post extends BaseEntity {
     private Member author;
     @Column(unique = true)
     private String subject;
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
 }

@@ -10,10 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -39,5 +37,13 @@ public class PostController {
         String msg = "%d번 게시물이 작성되었습니다.".formatted(post.getId());
         msg = Ut.url.encode(msg);
         return "redirect:/post/%d?msg=%s".formatted(post.getId(), msg);
+    }
+
+    @GetMapping("/{id}")
+    public String showDetail(Model model, @PathVariable Long id) {
+        Post post = postService.getPostById(id);
+        model.addAttribute("post", post);
+
+        return "post/detail";
     }
 }
