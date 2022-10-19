@@ -25,5 +25,6 @@ public class Post extends BaseEntity {
     private String subject;
     @Column(columnDefinition = "LONGTEXT")
     private String content;
-
+    @Column(columnDefinition = "LONGTEXT")
+    private String contentHtml;
 }

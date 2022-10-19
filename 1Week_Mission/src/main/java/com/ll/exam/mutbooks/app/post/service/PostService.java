@@ -1,5 +1,6 @@
 package com.ll.exam.mutbooks.app.post.service;
 
+import com.ll.exam.mutbooks.app.base.entity.BaseEntity;
 import com.ll.exam.mutbooks.app.member.entity.Member;
 import com.ll.exam.mutbooks.app.post.entity.Post;
 import com.ll.exam.mutbooks.app.post.repository.PostRepository;
@@ -7,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

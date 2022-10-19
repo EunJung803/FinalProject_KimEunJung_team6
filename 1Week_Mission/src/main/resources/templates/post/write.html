@@ -41,18 +41,30 @@
         </script>
 
         <form th:action method="POST" enctype="multipart/form-data" onsubmit="WriteForm__submit(this); return false;">
-            <div>
-                <span>제목</span>
-                <input type="text" name="subject">
-            </div>
-            <div>
-                <span>내용</span>
-                <textarea name="content"></textarea>
+
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">제목</span>
+                </label>
+                <input type="text" name="subject" class="input input-bordered">
             </div>
 
-            <div>
-                <span>글쓰기</span>
-                <input type="submit" value="작성">
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">내용</span>
+                </label>
+                <textarea name="content" class="input input-bordered"></textarea>
+            </div>
+
+            <div class="form-control mt-3">
+                <label class="label">
+                    <span class="label-text">해시태그</span>
+                </label>
+                <input type="text" name="keywords" class="input input-bordered">
+            </div>
+
+            <div class="grid mt-3">
+                <input class="btn btn-primary" type="submit" value="작성">
             </div>
         </form>
     </div>

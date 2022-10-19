@@ -12,4 +12,7 @@ public class PostForm {
     private String subject;
     @NotEmpty
     private String content;
+    @NotEmpty
+    private String contentHtml;
+    private String keywords;
 }
