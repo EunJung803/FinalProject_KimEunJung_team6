@@ -16,14 +16,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/post")
 @Slf4j
 @RequiredArgsConstructor
 public class PostController {
-
     private final PostService postService;
+
+    @GetMapping("/list")
+    public String showList(Model model) {
+        List<Post> postList = postService.getPostList();
+
+        model.addAttribute("postList", postList);
+
+        return "post/list";
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
@@ -93,6 +102,4 @@ public class PostController {
         String msg = Ut.url.encode("%d번 게시물이 삭제되었습니다.".formatted(id));
         return "redirect:/post/list?msg=%s".formatted(msg);
     }
-
-    // ToDo : GET /post/list
 }

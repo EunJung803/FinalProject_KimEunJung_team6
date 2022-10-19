@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +41,9 @@ public class PostService {
 
     public void delete(Post post) {
         postRepository.delete(post);
+    }
+
+    public List<Post> getPostList() {
+        return postRepository.findAll();
     }
 }
