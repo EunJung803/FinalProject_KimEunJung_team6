@@ -7,37 +7,47 @@
 
 <body>
 <main layout:fragment="main">
-  <div class="container">
-    <h1>글 상세페이지</h1>
 
-  <!--    [[${post}]]-->
-      <div>
-        작성 : [[${post.createDate}]]
+  <section class="section section-post-list container mx-auto">
+
+    <div class="px-2 pt-4">
+      <h1>글 상세페이지</h1>
+
+    <!--    [[${post}]]-->
+        <div>
+          작성 : [[${post.createDate}]]
+        </div>
+
+        <div>
+          수정 : [[${post.modifyDate}]]
+        </div>
+
+        <div>
+          작성자 : [[${post.author.username}]]
+        </div>
+
+        <div>
+          제목 : [[${post.subject}]]
+        </div>
+
+        <div>
+          내용 : [[${post.content}]]
+        </div>
+
+      <!-- 추가 예정
+        <div>
+          해시태그 :
+        </div>
+      -->
+
+      <div class="grid grid-cols-2 mt-2 gap-2">
+        <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-primary btn-outline">수정하기</a>
+        <a th:href="@{|/post/${post.id}/delete|}" class="btn btn-primary btn-outline">삭제하기</a>
       </div>
 
-      <div>
-        수정 : [[${post.modifyDate}]]
-      </div>
+    </div>
+  </section>
 
-      <div>
-        작성자 : [[${post.author.username}]]
-      </div>
-
-      <div>
-        제목 : [[${post.subject}]]
-      </div>
-
-      <div>
-        내용 : [[${post.content}]]
-      </div>
-
-    <!-- 추가 예정
-      <div>
-        해시태그 :
-      </div>
-    -->
-
-  </div>
 </main>
 </body>
 </html>

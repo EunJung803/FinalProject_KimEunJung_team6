@@ -7,55 +7,123 @@
 
 <body>
 <main layout:fragment="main">
-  <div class="container">
-    <h1>글 수정하기</h1>
+  <section class="section section-write container mx-auto">
 
-    <script>
-      let WriteForm__submitDone = false;
+    <div class="px-2 pt-4">
+      <h1 class="font-bold text-lg">
+        <i class="fa-solid fa-pen"></i>
+        글 수정
+      </h1>
 
-      function WriteForm__submit(form) {
-        if (WriteForm__submitDone) {
-          return;
+      <script>
+        let WriteForm__submitDone = false;
+
+        function WriteForm__submit(form) {
+          if (WriteForm__submitDone) {
+            return;
+          }
+
+          form.subject.value = form.subject.value.trim();
+
+          if (form.subject.value.length == 0) {
+            warningModal("글 제목을 입력해주세요.");
+            form.subject.focus();
+            return;
+          }
+
+          const editor = $(form).find(".toast-ui-editor").data("data-toast-editor");
+          const markdown = editor.getMarkdown().trim();
+          const html = editor.getHTML().trim();
+
+          form.content.value = markdown;
+          form.contentHtml.value = html;
+
+          if (form.content.value.length == 0 || form.contentHtml.value.length == 0) {
+            warningModal("글 내용을 입력해주세요.");
+            editor.focus();
+            return;
+          }
+
+          form.submit();
+          WriteForm__submitDone = true;
         }
 
-        form.subject.value = form.subject.value.trim();
+      </script>
 
-        if (form.subject.value.length == 0) {
-          warningModal("글 제목을 입력해주세요.");
-          form.subject.focus();
-          return;
-        }
+      <form th:action method="POST" class="flex flex-col gap-3" onsubmit="WriteForm__submit(this); return false;">
+        <input type="hidden" name="content">
+        <input type="hidden" name="contentHtml">
 
-        form.content.value = form.content.value.trim();
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">번호</span>
+          </label>
 
-        if (form.content.value.length == 0) {
-          warningModal("글 내용을 입력해주세요.");
-          form.content.focus();
-          return;
-        }
+          <div class="badge" th:text="${post.id}"></div>
+        </div>
 
-        form.submit();
-        WriteForm__submitDone = true;
-      }
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">날짜</span>
+          </label>
+          <div class="flex flex-wrap gap-2">
 
-    </script>
+            <div class="badge">
+              <i class="fa-solid fa-pen"></i>
+              <span class="ml-1">작성</span>
+              <span class="ml-1"
+                    th:text="${#temporals.format(post.createDate, 'yy-MM-dd HH:mm')}"></span>
+            </div>
+            <div class="badge badge-outline">
+              <i class="fa-solid fa-eraser"></i>
+              <span class="ml-1">수정</span>
+              <span class="ml-1"
+                    th:text="${#temporals.format(post.modifyDate, 'yy-MM-dd HH:mm')}"></span>
+            </div>
+          </div>
+        </div>
 
-    <form th:action method="POST" enctype="multipart/form-data" onsubmit="WriteForm__submit(this); return false;">
-      <div>
-        <span>제목</span>
-        <input type="text" name="subject" th:value="${post.subject}">
-      </div>
-      <div>
-        <span>내용</span>
-        <textarea name="content" th:text="${post.content}"></textarea>
-      </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">제목</span>
+          </label>
+          <input autofocus type="text" name="subject" placeholder="제목" class="input input-bordered"
+                 maxlength="50" th:value="${post.subject}">
+        </div>
 
-      <div>
-        <span>수정</span>
-        <input type="submit" value="수정">
-      </div>
-    </form>
-  </div>
+<!--        <div class="form-control">-->
+<!--          <label class="label">-->
+<!--            <span class="label-text">태그</span>-->
+<!--          </label>-->
+<!--          <input type="text" name="keywords" placeholder="#태그1 #태그2 #태그3 ..."-->
+<!--                 class="input input-bordered"-->
+<!--                 maxlength="50" th:value="${post.keywords}">-->
+<!--        </div>-->
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">내용</span>
+          </label>
+          <div class="toast-ui-editor" toast-ui-editor--height="400px">
+            <script type="text/x-template" th:utext="${post.content}"></script>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 mt-2 gap-2">
+          <button type="button" onclick="history.back();" class="btn btn-accent btn-outline">
+            <i class="fa-solid fa-angle-left"></i>
+            <span class="ml-1">취소</span>
+          </button>
+          <button class="btn btn-primary" type="submit">
+            <i class="fa-solid fa-eraser"></i>
+            <span class="ml-1">수정</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </section>
+
 </main>
 </body>
 </html>
