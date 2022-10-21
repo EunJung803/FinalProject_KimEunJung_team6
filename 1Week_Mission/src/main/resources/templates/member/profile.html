@@ -16,7 +16,7 @@
                 <label class="label">
                     <span class="label-text">내 아이디</span>
                 </label>
-                <div class="border p-2" style="border-radius: 15px; background-color: #d3d3d3">
+                <div class="border border-accent p-2" style="border-radius: 15px;">
                     <span class="m-3" th:text="${member.getName()}"></span>
                 </div>
             </div>
@@ -25,18 +25,18 @@
                 <label class="label">
                     <span class="label-text">내 이메일</span>
                 </label>
-                <div class="border p-2" style="border-radius: 15px; background-color: #d3d3d3">
+                <div class="border border-accent p-2" style="border-radius: 15px;">
                     <span class="m-3" th:text="${member.getEmail()}"></span>
                 </div>
             </div>
 
             <div class="mt-5">
                 <div class="grid mt-2 gap-2">
-                    <a href="/member/modify" class="btn btn-secondary btn-outline">회원정보 수정</a>
+                    <a href="/member/modify" class="btn btn-primary btn-outline">회원정보 수정</a>
                 </div>
 
                 <div class="grid mt-2 gap-2">
-                    <a href="/member/modifyPassword" class="btn btn-secondary btn-outline">비밀번호 변경</a>
+                    <a href="/member/modifyPassword" class="btn btn-primary btn-outline">비밀번호 변경</a>
                 </div>
             </div>
         </div>
