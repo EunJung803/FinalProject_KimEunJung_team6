@@ -1,7 +1,7 @@
 package com.ll.exam.mutbooks.app.member.controller;
 
 import com.ll.exam.mutbooks.app.member.entity.Member;
-import com.ll.exam.mutbooks.app.member.form.JoinForm;
+import com.ll.exam.mutbooks.app.member.form.dto.JoinDto;
 import com.ll.exam.mutbooks.app.member.service.MemberService;
 import com.ll.exam.mutbooks.app.security.dto.MemberContext;
 import com.ll.exam.mutbooks.util.Ut;
@@ -42,8 +42,8 @@ public class MemberController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
-    public String join(@Valid JoinForm joinForm) {
-        memberService.join(joinForm.getUsername(), joinForm.getPassword(), joinForm.getEmail());
+    public String join(@Valid JoinDto joinDto) {
+        memberService.join(joinDto.getUsername(), joinDto.getPassword(), joinDto.getEmail());
 
         return "redirect:/member/login?msg=" + Ut.url.encode("회원가입이 완료되었습니다.");
     }
