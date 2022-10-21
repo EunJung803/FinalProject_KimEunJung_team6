@@ -12,15 +12,6 @@
 
         <script th:inline="javascript">
 
-            const Editor = toastui.Editor;
-
-            const content = new Editor({
-                el: document.querySelector('#toastEditor'),
-                height: '500px',
-                initialEditType: 'markdown',
-                previewStyle: 'vertical'
-            });
-
             let WriteForm__submitDone = false;
 
             function WriteForm__submit(form) {
@@ -36,8 +27,12 @@
                     return;
                 }
 
-                const html = content.getHTML();
-                const markdown = content.getMarkdown();
+                const editor = $(form).find(".toast-ui-editor").data("data-toast-editor");
+                const markdown = editor.getMarkdown().trim();
+                const html = editor.getHTML().trim();
+
+                form.content.value = markdown;
+                form.contentHtml.value = html;
 
                 if (markdown.trim().length == 0) {
                     warningModal("내용을 입력해주세요.");
@@ -50,9 +45,6 @@
                     markdown.focus();
                     return;
                 }
-
-                form.content.value = markdown;
-                form.contentHtml.value = html;
 
                 form.submit();
                 WriteForm__submitDone = true;
@@ -72,8 +64,7 @@
             <label class="label">
                 <span class="label-text">내용</span>
             </label>
-            <div id="toastEditor"></div>
-<!--            <div class="toast-ui-editor" toast-ui-editor&#45;&#45;height="calc(100vh - 300px)"></div>-->
+            <div class="toast-ui-editor" toast-ui-editor--height="400px"></div>
             <textarea name="content" style="display: none"></textarea>
             <textarea name="contentHtml" style="display: none"></textarea>
 

@@ -43,7 +43,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@AuthenticationPrincipal MemberContext memberContext, @Valid PostDto postDto) {
-        Post post = postService.write(memberContext.getId(), postDto.getSubject(), postDto.getContent());
+        Post post = postService.write(memberContext.getId(), postDto.getSubject(), postDto.getContent(), postDto.getContentHtml());
 
         String msg = "%d번 게시물이 작성되었습니다.".formatted(post.getId());
         msg = Ut.url.encode(msg);

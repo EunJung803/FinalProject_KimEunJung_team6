@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 public class PostService {
     private final PostRepository postRepository;
 
-    public Post write(Long authorId, String subject, String content) {
+    public Post write(Long authorId, String subject, String content, String contentHtml) {
         Post post = Post
                 .builder()
                 .author(new Member(authorId))
                 .subject(subject)
                 .content(content)
+                .contentHtml(contentHtml)
                 .build();
 
         postRepository.save(post);
