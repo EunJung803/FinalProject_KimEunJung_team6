@@ -3,6 +3,7 @@ package com.ll.exam.mutbooks.app.post.form.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Setter
@@ -14,5 +15,6 @@ public class PostDto {
     private String content;
     @NotEmpty
     private String contentHtml;
+    @NotBlank
     private String keywords;
 }
