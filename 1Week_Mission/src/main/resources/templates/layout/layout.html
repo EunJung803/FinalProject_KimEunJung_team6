@@ -103,17 +103,12 @@
             </a>
             <form name="logoutForm" th:action="@{/member/logout}" method="post" hidden></form>
 
-            <a href="/member/modify" class="inline-flex" sec:authorize="isAuthenticated()">
+            <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
                 <span class="ml-[2px] hidden sm:block">
-                    회원정보수정
+                    My 프로필
                 </span>
             </a>
-
-            <a href="/member/modifyPassword" class="inline-flex" sec:authorize="isAuthenticated()">
-                <span class="ml-[2px] hidden sm:block">
-                    비밀번호변경
-                </span>
-            </a>
+            
         </div>
     </div>
 </header>

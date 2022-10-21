@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>My 프로필</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-login flex-grow flex flex-col items-center justify-center">
+
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">내 프로필</h1>
+
+            <div>
+                <label class="label">
+                    <span class="label-text">내 아이디</span>
+                </label>
+                <div class="border p-2" style="border-radius: 15px; background-color: #d3d3d3">
+                    <span class="m-3" th:text="${member.getName()}"></span>
+                </div>
+            </div>
+
+            <div>
+                <label class="label">
+                    <span class="label-text">내 이메일</span>
+                </label>
+                <div class="border p-2" style="border-radius: 15px; background-color: #d3d3d3">
+                    <span class="m-3" th:text="${member.getEmail()}"></span>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <div class="grid mt-2 gap-2">
+                    <a href="/member/modify" class="btn btn-secondary btn-outline">회원정보 수정</a>
+                </div>
+
+                <div class="grid mt-2 gap-2">
+                    <a href="/member/modifyPassword" class="btn btn-secondary btn-outline">비밀번호 변경</a>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </section>
+
+</main>
+</body>
+</html>
