@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>글쓰기</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <div class="container">
+        <h1>글쓰기</h1>
+
+        <script th:inline="javascript">
+
+            const Editor = toastui.Editor;
+
+            const content = new Editor({
+                el: document.querySelector('#toastEditor'),
+                height: '500px',
+                initialEditType: 'markdown',
+                previewStyle: 'vertical'
+            });
+
+            let WriteForm__submitDone = false;
+
+            function WriteForm__submit(form) {
+                if (WriteForm__submitDone) {
+                    return;
+                }
+
+                form.subject.value = form.subject.value.trim();
+
+                if (form.subject.value.length == 0) {
+                    warningModal("글 제목을 입력해주세요.");
+                    form.subject.focus();
+                    return;
+                }
+
+                const html = content.getHTML();
+                const markdown = content.getMarkdown();
+
+                if (markdown.trim().length == 0) {
+                    warningModal("내용을 입력해주세요.");
+                    markdown.focus();
+                    return;
+                }
+
+                if (markdown.trim().length < 1000) {
+                    warningModal("1000자 이상 작성해야 합니다.");
+                    markdown.focus();
+                    return;
+                }
+
+                form.content.value = markdown;
+                form.contentHtml.value = html;
+
+                form.submit();
+                WriteForm__submitDone = true;
+            }
+
+        </script>
+
+        <form th:action method="POST" enctype="multipart/form-data" onsubmit="WriteForm__submit(this); return false;">
+
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">제목</span>
+                </label>
+                <input type="text" name="subject" class="input input-bordered">
+            </div>
+
+            <label class="label">
+                <span class="label-text">내용</span>
+            </label>
+            <div id="toastEditor"></div>
+<!--            <div class="toast-ui-editor" toast-ui-editor&#45;&#45;height="calc(100vh - 300px)"></div>-->
+            <textarea name="content" style="display: none"></textarea>
+            <textarea name="contentHtml" style="display: none"></textarea>
+
+            <div class="form-control mt-3">
+                <label class="label">
+                    <span class="label-text">해시태그</span>
+                </label>
+                <input type="text" name="keywords" class="input input-bordered">
+            </div>
+
+            <div class="grid mt-3">
+                <input class="btn btn-primary" type="submit" value="작성">
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
