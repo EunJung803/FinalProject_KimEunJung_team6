@@ -1,7 +1,7 @@
 package com.ll.exam.mutbooks.app.post.controller;
 
 import com.ll.exam.mutbooks.app.post.entity.Post;
-import com.ll.exam.mutbooks.app.post.form.PostForm;
+import com.ll.exam.mutbooks.app.post.form.dto.PostDto;
 import com.ll.exam.mutbooks.app.post.service.PostService;
 import com.ll.exam.mutbooks.app.security.dto.MemberContext;
 import com.ll.exam.mutbooks.util.Ut;
@@ -42,8 +42,8 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
-    public String write(@AuthenticationPrincipal MemberContext memberContext, @Valid PostForm postForm) {
-        Post post = postService.write(memberContext.getId(), postForm.getSubject(), postForm.getContent());
+    public String write(@AuthenticationPrincipal MemberContext memberContext, @Valid PostDto postDto) {
+        Post post = postService.write(memberContext.getId(), postDto.getSubject(), postDto.getContent(), postDto.getContentHtml(), postDto.getKeywords());
 
         String msg = "%d번 게시물이 작성되었습니다.".formatted(post.getId());
         msg = Ut.url.encode(msg);
@@ -75,14 +75,14 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/modify")
-    public String modify(@AuthenticationPrincipal MemberContext memberContext, @PathVariable Long id, @Valid PostForm postForm) {
+    public String modify(@AuthenticationPrincipal MemberContext memberContext, @PathVariable Long id, @Valid PostDto postDto) {
         Post post = postService.getPostById(id);
 
         if (memberContext.memberIsNotAuthor(post.getAuthor())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-        postService.modify(post, postForm.getSubject(), postForm.getContent());
+        postService.modify(post, postDto.getSubject(), postDto.getContent());
 
         String msg = Ut.url.encode("%d번 게시물이 수정되었습니다.".formatted(id));
         return "redirect:/post/%d?msg=%s".formatted(id, msg);

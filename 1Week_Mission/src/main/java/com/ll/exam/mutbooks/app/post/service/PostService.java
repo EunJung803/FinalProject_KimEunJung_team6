@@ -4,6 +4,7 @@ import com.ll.exam.mutbooks.app.base.entity.BaseEntity;
 import com.ll.exam.mutbooks.app.member.entity.Member;
 import com.ll.exam.mutbooks.app.post.entity.Post;
 import com.ll.exam.mutbooks.app.post.repository.PostRepository;
+import com.ll.exam.mutbooks.app.postHashTag.service.PostHashTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +19,26 @@ import java.util.stream.Collectors;
 @Transactional
 public class PostService {
     private final PostRepository postRepository;
+    private final PostHashTagService postHashTagService;
 
-    public Post write(Long authorId, String subject, String content) {
+    public Post write(Long authorId, String subject, String content, String contentHtml, String postHashTag) {
         Post post = Post
                 .builder()
                 .author(new Member(authorId))
                 .subject(subject)
                 .content(content)
+                .contentHtml(contentHtml)
                 .build();
 
         postRepository.save(post);
 
+        applyPostTags(post, postHashTag);
+
         return post;
+    }
+
+    private void applyPostTags(Post post, String postHashTag) {
+        postHashTagService.applyPostTags(post, postHashTag);
     }
 
     public Post getPostById(Long id) {

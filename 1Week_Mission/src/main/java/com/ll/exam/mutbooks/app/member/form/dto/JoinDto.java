@@ -1,11 +1,11 @@
-package com.ll.exam.mutbooks.app.member.form;
+package com.ll.exam.mutbooks.app.member.form.dto;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class JoinForm {
+public class JoinDto {
     @NotEmpty
     private String username;
     @NotEmpty
