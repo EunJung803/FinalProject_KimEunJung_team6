@@ -4,6 +4,8 @@ import com.ll.exam.final__2022_10_08.app.cart.entity.CartItem;
 import com.ll.exam.final__2022_10_08.app.cart.service.CartService;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import com.ll.exam.final__2022_10_08.app.member.service.MemberService;
+import com.ll.exam.final__2022_10_08.app.order.entity.Order;
+import com.ll.exam.final__2022_10_08.app.order.service.OrderService;
 import com.ll.exam.final__2022_10_08.app.post.service.PostService;
 import com.ll.exam.final__2022_10_08.app.product.entity.Product;
 import com.ll.exam.final__2022_10_08.app.product.service.ProductService;
@@ -11,6 +13,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @Profile({"dev", "test"})
@@ -22,7 +27,8 @@ public class NotProdInitData {
             MemberService memberService,
             PostService postService,
             ProductService productService,
-            CartService cartService
+            CartService cartService,
+            OrderService orderService
     ) {
         return args -> {
             if (initDataDone) {
@@ -30,6 +36,20 @@ public class NotProdInitData {
             }
 
             initDataDone = true;
+
+            class Helper {
+                public Order order(Member member, List<Product> products) {
+                    for (int i = 0; i < products.size(); i++) {
+                        Product product = products.get(i);
+
+                        cartService.addItem(member, product);
+                    }
+
+                    return orderService.createFromCart(member);
+                }
+            }
+
+            Helper helper = new Helper();
 
             Member member1 = memberService.join("user1", "1234", "user1@test.com", null);
             Member member2 = memberService.join("user2", "1234", "user2@test.com", "홍길순");
@@ -80,6 +100,34 @@ public class NotProdInitData {
             memberService.addCash(member1, 1_000_000, "충전__무통장입금");
 
             memberService.addCash(member2, 2_000_000, "충전__무통장입금");
+
+            // 1번 주문 : 결제완료
+            Order order1 = helper.order(member1, Arrays.asList(
+                            product1,
+                            product2
+                    )
+            );
+
+            int order1PayPrice = order1.calculatePayPrice();
+            orderService.payByRestCashOnly(order1);
+
+            // 2번 주문 : 결제 후 환불
+            Order order2 = helper.order(member2, Arrays.asList(
+                            product3,
+                            product4
+                    )
+            );
+
+            orderService.payByRestCashOnly(order2);
+
+            orderService.refund(order2);
+
+            // 3번 주문 : 결제 전
+            Order order3 = helper.order(member2, Arrays.asList(
+                            product1,
+                            product2
+                    )
+            );
         };
     }
 }
