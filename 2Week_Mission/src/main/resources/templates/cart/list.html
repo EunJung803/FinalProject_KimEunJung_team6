@@ -96,7 +96,7 @@
         </li>
       </ul>
 
-      <a href="javascript:;" onclick="RemoveCartItemsForm__submit();" class="btn btn-warning btn-outline btn-sm">삭제</a>
+      <a href="javascript:;" onclick="RemoveCartItemsForm__submit();" class="btn btn-warning btn-outline btn-sm">선택삭제</a>
       <form method="POST" name="removeCartItemsForm" th:action="@{|/cart/remove|}" hidden>
         <input type="hidden" name="ids">
       </form>
