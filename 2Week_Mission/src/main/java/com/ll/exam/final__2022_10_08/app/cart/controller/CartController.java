@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class CartController {
         Member buyer = memberContext.getMember();
         Product wantedItem = productService.findById(id).get();
 
-        if(cartService.existsByBuyerIdAndProductId(buyer, wantedItem)){
+        if(cartService.hasItem(buyer, wantedItem)){
             return "redirect:/product/"+id+"?errorMsg=" + Ut.url.encode("이미 장바구니에 담은 상품입니다.");
         }
 
@@ -53,7 +54,26 @@ public class CartController {
 
         model.addAttribute("items", addItem);
 
-//        return "cart/list";
         return Rq.redirectWithMsg("/cart/list", "%s이 장바구니에 담겼습니다.".formatted(wantedItem.getSubject()));
+    }
+
+    @PostMapping("/remove")
+    @PreAuthorize("isAuthenticated()")
+    public String removeItems(@AuthenticationPrincipal MemberContext memberContext, String ids) {
+        Member buyer = memberContext.getMember();
+
+        String[] idsArr = ids.split(",");
+
+        Arrays.stream(idsArr)
+                .mapToLong(Long::parseLong)
+                .forEach(id -> {
+                    CartItem cartItem = cartService.findItemById(id).orElse(null);
+
+                    if (cartService.actorCanDelete(buyer, cartItem)) {
+                        cartService.removeItem(cartItem);
+                    }
+                });
+
+        return "redirect:/cart/list?msg=" + Ut.url.encode("%d건의 품목을 삭제하였습니다.".formatted(idsArr.length));
     }
 }
