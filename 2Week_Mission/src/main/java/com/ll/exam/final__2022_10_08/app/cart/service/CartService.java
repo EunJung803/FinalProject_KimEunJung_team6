@@ -17,6 +17,7 @@ import java.util.Optional;
 public class CartService {
     private final CartItemRepository cartItemRepository;
 
+    @Transactional
     public CartItem addItem(Member buyer, Product product) {
         CartItem oldCartItem = cartItemRepository.findByBuyerIdAndProductId(buyer.getId(), product.getId()).orElse(null);
 
@@ -36,5 +37,13 @@ public class CartService {
 
     public List<CartItem> getItemsByBuyer(Member buyer) {
         return cartItemRepository.findAllByBuyerId(buyer.getId());
+    }
+
+    public Optional<CartItem> findItemById(long id) {
+        return cartItemRepository.findById(id);
+    }
+
+    public boolean existsByBuyerIdAndProductId(Member buyer, Product wantedItem) {
+        return cartItemRepository.existsByBuyerIdAndProductId(buyer.getId(), wantedItem.getId());
     }
 }

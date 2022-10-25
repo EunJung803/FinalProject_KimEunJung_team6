@@ -27,6 +27,21 @@
               <span>가격 : </span><span th:text="${item.product.salePrice}"></span>
             </div>
           </div>
+        </li>
+        <li th:each="item : ${addItem}" class="flex items-center m-2 p-2">
+          <input onchange="CartItemCheckbox__changed();" type="checkbox" class="cartItemCheckbox checkbox mr-2" th:value="${item.id}">
+          <svg width="80" height="80" th:data-jdenticon-value="${item.product.jdenticon}"></svg>
+          <div class="ml-2">
+            <div>
+              <span>상품명 : </span><span th:text="${item.product.subject}"></span>
+            </div>
+            <div>
+              <span>작가명 : </span><span th:text="${item.product.author.name}"></span>
+            </div>
+            <div>
+              <span>가격 : </span><span th:text="${item.product.salePrice}"></span>
+            </div>
+          </div>
 
           </span>
         </li>
