@@ -36,6 +36,7 @@ public class OrderController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper;
 
+    // 주문 상세
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@AuthenticationPrincipal MemberContext memberContext, @PathVariable long id, Model model) {
@@ -52,6 +53,7 @@ public class OrderController {
         return "order/detail";
     }
 
+    // 주문 생성
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String makeOrder(@AuthenticationPrincipal MemberContext memberContext) {
