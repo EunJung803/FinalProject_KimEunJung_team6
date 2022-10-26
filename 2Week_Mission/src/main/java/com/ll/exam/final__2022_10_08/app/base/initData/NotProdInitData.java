@@ -101,6 +101,9 @@ public class NotProdInitData {
 
             memberService.addCash(member2, 2_000_000, "충전__무통장입금");
 
+            /*
+            // 주문 생성 데이터
+
             // 1번 주문 : 결제완료
             Order order1 = helper.order(member1, Arrays.asList(
                             product1,
@@ -128,6 +131,7 @@ public class NotProdInitData {
                             product2
                     )
             );
+             */
         };
     }
 }

@@ -50,7 +50,7 @@
         }
 
         function OrderCartItemsForm__submit() {
-
+          document.orderCartItemsForm.submit();
         }
       </script>
 
@@ -102,7 +102,7 @@
       </form>
 
       <a href="javascript:;" onclick="OrderCartItemsForm__submit();" class="btn btn-primary btn-sm">주문하기</a>
-      <form method="POST" name="orderCartItemsForm" th:action="@{|/order/makeOrder|}" hidden></form>
+      <form method="POST" name="orderCartItemsForm" th:action="@{|/order/create|}" hidden></form>
 
     </div>
 
