@@ -36,7 +36,9 @@ public class OrderController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper;
 
-    // 주문 상세
+    /**
+     * 주문 상세
+     */
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@AuthenticationPrincipal MemberContext memberContext, @PathVariable long id, Model model) {
@@ -53,7 +55,10 @@ public class OrderController {
         return "order/detail";
     }
 
-    // 주문 생성
+
+    /**
+     * 주문 생성
+     */
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String makeOrder(@AuthenticationPrincipal MemberContext memberContext) {
@@ -63,7 +68,19 @@ public class OrderController {
         return "redirect:/order/%d".formatted(order.getId()) + "?msg=" + Ut.url.encode("%d번 주문이 생성되었습니다.".formatted(order.getId()));
     }
 
-    // 토스페이먼츠로 주문 결제하기 (PG연동)
+
+    // TODO : 주문 리스트
+    @GetMapping("/list")
+    @PreAuthorize("isAuthenticated()")
+    public String showOrderList(@AuthenticationPrincipal MemberContext memberContext, Model model) {
+
+        return "order/list";
+    }
+
+
+    /**
+     * 토스페이먼츠로 주문 결제하기 (PG연동)
+     */
     @PostConstruct
     private void init() {
         restTemplate.setErrorHandler(new ResponseErrorHandler() {
