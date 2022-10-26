@@ -30,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -75,10 +76,16 @@ public class OrderController {
     }
 
 
-    // TODO : 주문 리스트
+    /**
+     * 주문 리스트
+     */
     @GetMapping("/list")
     @PreAuthorize("isAuthenticated()")
     public String showOrderList(@AuthenticationPrincipal MemberContext memberContext, Model model) {
+        Member member = memberContext.getMember();  // buyer 정보
+        List<Order> orders = orderService.getOrderList(member);
+
+        model.addAttribute("orders", orders);
 
         return "order/list";
     }
