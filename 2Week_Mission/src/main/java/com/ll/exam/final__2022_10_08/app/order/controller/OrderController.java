@@ -3,7 +3,9 @@ package com.ll.exam.final__2022_10_08.app.order.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
+import com.ll.exam.final__2022_10_08.app.member.service.MemberService;
 import com.ll.exam.final__2022_10_08.app.order.entity.Order;
+import com.ll.exam.final__2022_10_08.app.order.exception.ActorCanNotPayOrderException;
 import com.ll.exam.final__2022_10_08.app.order.exception.ActorCanNotSeeOrderException;
 import com.ll.exam.final__2022_10_08.app.order.exception.OrderIdNotMatchedException;
 import com.ll.exam.final__2022_10_08.app.order.service.OrderService;
@@ -36,6 +38,7 @@ public class OrderController {
     private final OrderService orderService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper;
+    private final MemberService memberService;
 
     /**
      * 주문 상세
@@ -44,14 +47,15 @@ public class OrderController {
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@AuthenticationPrincipal MemberContext memberContext, @PathVariable long id, Model model) {
         Order order = orderService.findForPrintById(id).get();
-
         Member actor = memberContext.getMember();
+        long restCash = memberService.getRestCash(actor);
 
         if (orderService.actorCanSee(actor, order) == false) {
             throw new ActorCanNotSeeOrderException();
         }
 
         model.addAttribute("order", order);
+        model.addAttribute("actorRestCash", restCash);
 
         return "order/detail";
     }
@@ -147,5 +151,26 @@ public class OrderController {
         model.addAttribute("message", message);
         model.addAttribute("code", code);
         return "order/fail";
+    }
+
+    /**
+     * 보유 예치금으로 결제하기
+     */
+    @PostMapping("/{id}/payByRestCashOnly")
+    @PreAuthorize("isAuthenticated()")
+    public String payByRestCashOnly(@AuthenticationPrincipal MemberContext memberContext, @PathVariable long id) {
+        Order order = orderService.findForPrintById(id).get();
+
+        Member actor = memberContext.getMember();
+
+        long restCash = memberService.getRestCash(actor);
+
+        if (orderService.actorCanPayment(actor, order) == false) {
+            throw new ActorCanNotPayOrderException();
+        }
+
+        orderService.payByRestCashOnly(order);
+
+        return "redirect:/order/%d?msg=%s".formatted(order.getId(), Ut.url.encode("예치금으로 결제했습니다."));
     }
 }
