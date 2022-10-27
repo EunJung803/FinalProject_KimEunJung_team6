@@ -98,11 +98,25 @@
                     도서 목록
                 </span>
             </a>
+
+            <a href="/cart/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="ml-[2px] hidden lg:block">
+                    내 장바구니
+                </span>
+            </a>
+
+            <a href="/order/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-barcode"></i>
+                <span class="ml-[2px] hidden lg:block">
+                    내 주문목록
+                </span>
+            </a>
         </div>
     </div>
 </header>
 
-<div class="flex-grow flex flex-col py-5">
+<div class="flex-grow flex flex-col py-5" data-theme="winter">
     <main layout:fragment="main" class="flex-grow flex flex-col"></main>
 </div>
 
