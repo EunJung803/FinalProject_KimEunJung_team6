@@ -2,6 +2,7 @@ package com.ll.exam.final__2022_10_08.app.order.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ll.exam.final__2022_10_08.app.base.rq.Rq;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import com.ll.exam.final__2022_10_08.app.member.service.MemberService;
 import com.ll.exam.final__2022_10_08.app.order.entity.Order;
@@ -190,6 +191,6 @@ public class OrderController {
 
         orderService.payByRestCashOnly(order);
 
-        return "redirect:/order/%d?msg=%s".formatted(order.getId(), Ut.url.encode("예치금으로 결제했습니다."));
+        return Rq.redirectWithMsg("/order/%d?msg=".formatted(order.getId()), "예치금으로 결제했습니다.");
     }
 }
