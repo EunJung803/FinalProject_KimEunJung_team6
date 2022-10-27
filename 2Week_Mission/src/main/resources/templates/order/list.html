@@ -18,22 +18,22 @@
                 <thead class="table-dark">
                 <tr>
                     <th>주문번호</th>
+                    <th>주문상품</th>
                     <th>주문날짜</th>
                     <th>주문가격</th>
-                    <th>주문상품</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <tr th:each="order : ${orders}">
                     <td th:text="${order.id}"></td>
-                    <td th:text="${#temporals.format(order.modifyDate, 'yy-MM-dd HH:mm')}"></td>
-                    <td th:text="${order.calculatePayPrice}"></td>
                     <td th:each="orderItem : ${order.orderItems}">
                         <a th:href="@{/order/{id}(id = ${order.id})}">
-                        <span th:text="${orderItem.product.subject}" th:id="${order.id}" class="text-primary"></span>
+                            <span th:text="${orderItem.product.subject}" th:id="${order.id}" class="text-primary"></span>
                         </a>
                     </td>
+                    <td th:text="${#temporals.format(order.modifyDate, 'yy-MM-dd HH:mm')}"></td>
+                    <td th:text="${order.calculatePayPrice}"></td>
                 </tr>
                 </tbody>
 

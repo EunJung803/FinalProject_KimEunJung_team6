@@ -13,6 +13,7 @@ import com.ll.exam.final__2022_10_08.app.order.service.OrderService;
 import com.ll.exam.final__2022_10_08.app.security.dto.MemberContext;
 import com.ll.exam.final__2022_10_08.util.Ut;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -108,7 +109,8 @@ public class OrderController {
         });
     }
 
-    private final String SECRET_KEY = "test_sk_YyZqmkKeP8goN04j1xj8bQRxB9lG";
+    @Value("${custom.toss.serverKey}")
+    private String SECRET_KEY;
 
     @RequestMapping("/{id}/success")
     public String confirmPayment(

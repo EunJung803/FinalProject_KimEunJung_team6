@@ -87,11 +87,10 @@ public class Order extends BaseEntity {
         this.name = name;
     }
 
-    // 사용되지 않는 메서드 ??
-//    public boolean isPayable() {
-//        if ( isPaid ) return false;
-//        if ( isCanceled ) return false;
-//
-//        return true;
-//    }
+    public boolean isPayable() {
+        if ( isPaid ) return false;
+        if ( isCanceled ) return false;
+
+        return true;
+    }
 }
