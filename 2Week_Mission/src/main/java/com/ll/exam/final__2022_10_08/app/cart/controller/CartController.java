@@ -74,6 +74,6 @@ public class CartController {
                     }
                 });
 
-        return "redirect:/cart/list?msg=" + Ut.url.encode("%d건의 품목을 삭제하였습니다.".formatted(idsArr.length));
+        return Rq.redirectWithMsg("/cart/list", "%d건의 품목을 삭제하였습니다.".formatted(idsArr.length));
     }
 }
