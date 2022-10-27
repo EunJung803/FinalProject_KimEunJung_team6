@@ -52,15 +52,6 @@ public class CartService {
         cartItemRepository.delete(cartItem);
     }
 
-    @Transactional
-    public void removeItem(
-            Member buyer,
-            Long productId
-    ) {
-        Product product = new Product(productId);
-        removeItem(buyer, product.getId());
-    }
-
     public boolean actorCanDelete(Member buyer, CartItem cartItem) {
         return buyer.getId().equals(cartItem.getBuyer().getId());
     }

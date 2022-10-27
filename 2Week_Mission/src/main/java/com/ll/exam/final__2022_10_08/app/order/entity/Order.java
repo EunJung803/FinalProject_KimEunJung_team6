@@ -81,16 +81,17 @@ public class Order extends BaseEntity {
         String name = orderItems.get(0).getProduct().getSubject();
 
         if (orderItems.size() > 1) {
-            name += " 외 %d곡".formatted(orderItems.size() - 1);
+            name += " 외 %d권".formatted(orderItems.size() - 1);
         }
 
         this.name = name;
     }
 
-    public boolean isPayable() {
-        if ( isPaid ) return false;
-        if ( isCanceled ) return false;
-
-        return true;
-    }
+    // 사용되지 않는 메서드 ??
+//    public boolean isPayable() {
+//        if ( isPaid ) return false;
+//        if ( isCanceled ) return false;
+//
+//        return true;
+//    }
 }
