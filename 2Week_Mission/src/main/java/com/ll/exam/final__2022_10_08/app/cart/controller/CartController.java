@@ -46,8 +46,8 @@ public class CartController {
         Member buyer = memberContext.getMember();
         Product wantedItem = productService.findById(id).get();
 
-        if(cartService.hasItem(buyer, wantedItem)){
-            return "redirect:/product/"+id+"?errorMsg=" + Ut.url.encode("이미 장바구니에 담은 상품입니다.");
+        if(cartService.hasItem(wantedItem)){
+            return Rq.redirectWithErrorMsg("/product/"+id, "이미 장바구니에 담은 상품입니다.");
         }
 
         CartItem addItem = cartService.addItem(buyer, wantedItem);
