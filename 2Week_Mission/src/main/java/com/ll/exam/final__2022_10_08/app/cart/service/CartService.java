@@ -43,22 +43,20 @@ public class CartService {
         return cartItemRepository.findById(id);
     }
 
-    public boolean hasItem(Member buyer, Product wantedItem) {
-        return cartItemRepository.existsByBuyerIdAndProductId(buyer.getId(), wantedItem.getId());
+    public boolean hasItem(Product wantedItem) {
+        CartItem cartItem = cartItemRepository.findByProductId(wantedItem.getId()).orElse(null);
+
+        if (cartItem == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     @Transactional
     public void removeItem(CartItem cartItem) {
         cartItemRepository.delete(cartItem);
-    }
-
-    @Transactional
-    public void removeItem(
-            Member buyer,
-            Long productId
-    ) {
-        Product product = new Product(productId);
-        removeItem(buyer, product.getId());
     }
 
     public boolean actorCanDelete(Member buyer, CartItem cartItem) {

@@ -4,6 +4,7 @@ import com.ll.exam.final__2022_10_08.app.cart.entity.CartItem;
 import com.ll.exam.final__2022_10_08.app.cart.service.CartService;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import com.ll.exam.final__2022_10_08.app.member.service.MemberService;
+import com.ll.exam.final__2022_10_08.app.mybook.service.MyBookService;
 import com.ll.exam.final__2022_10_08.app.order.entity.Order;
 import com.ll.exam.final__2022_10_08.app.order.entity.OrderItem;
 import com.ll.exam.final__2022_10_08.app.order.repository.OrderRepository;
@@ -23,6 +24,7 @@ public class OrderService {
     private final MemberService memberService;
     private final CartService cartService;
     private final OrderRepository orderRepository;
+    private final MyBookService myBookService;
 
     @Transactional
     public Order createFromCart(Member buyer) {
@@ -82,6 +84,7 @@ public class OrderService {
         memberService.addCash(buyer, payPrice * -1, "주문__%d__사용__예치금".formatted(order.getId()));
 
         order.setPaymentDone();
+        myBookService.addItems(buyer, order.getOrderItems());
         orderRepository.save(order);
     }
 
@@ -121,6 +124,7 @@ public class OrderService {
         }
 
         order.setPaymentDone();
+        myBookService.addItems(buyer, order.getOrderItems());
         orderRepository.save(order);
     }
 
@@ -130,5 +134,10 @@ public class OrderService {
 
     public List<Order> getOrderList(Member buyer) {
         return orderRepository.findAllByBuyerId(buyer.getId());
+    }
+
+    @Transactional
+    public void cancelOrder(Order order) {
+        orderRepository.delete(order);
     }
 }

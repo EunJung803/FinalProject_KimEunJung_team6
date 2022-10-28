@@ -2,6 +2,7 @@ package com.ll.exam.final__2022_10_08.app.order.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ll.exam.final__2022_10_08.app.base.rq.Rq;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import com.ll.exam.final__2022_10_08.app.member.service.MemberService;
 import com.ll.exam.final__2022_10_08.app.order.entity.Order;
@@ -13,6 +14,7 @@ import com.ll.exam.final__2022_10_08.app.order.service.OrderService;
 import com.ll.exam.final__2022_10_08.app.security.dto.MemberContext;
 import com.ll.exam.final__2022_10_08.util.Ut;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -108,7 +110,8 @@ public class OrderController {
         });
     }
 
-    private final String SECRET_KEY = "test_sk_YyZqmkKeP8goN04j1xj8bQRxB9lG";
+    @Value("${custom.toss.serverKey}")
+    private String SECRET_KEY;
 
     @RequestMapping("/{id}/success")
     public String confirmPayment(
@@ -188,6 +191,24 @@ public class OrderController {
 
         orderService.payByRestCashOnly(order);
 
-        return "redirect:/order/%d?msg=%s".formatted(order.getId(), Ut.url.encode("예치금으로 결제했습니다."));
+        return Rq.redirectWithMsg("/order/%d?msg=".formatted(order.getId()), "예치금으로 결제했습니다.");
+    }
+
+    /**
+     * 주문 취소
+     */
+    @PostMapping("/{id}/cancel")
+    @PreAuthorize("isAuthenticated()")
+    public String cancelOrder(@PathVariable Long id, @AuthenticationPrincipal MemberContext memberContext) {
+        Member member = memberContext.getMember();
+        Order order = orderService.findForPrintById(id).get();
+
+        if (orderService.actorCanSee(member, order) == false) {
+            throw new ActorCanNotSeeOrderException();
+        }
+
+        orderService.cancelOrder(order);
+
+        return Rq.redirectWithMsg("/cart/list","%d번 주문이 취소되었습니다.".formatted(order.getId()));
     }
 }

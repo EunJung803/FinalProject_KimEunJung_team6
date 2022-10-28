@@ -40,19 +40,19 @@ public class CartController {
         return "cart/list";
     }
 
-    @GetMapping("/add/{id}")
+    @PostMapping("/add/{id}")
     @PreAuthorize("isAuthenticated()")
     public String addItems(@PathVariable Long id, @AuthenticationPrincipal MemberContext memberContext, Model model) {
         Member buyer = memberContext.getMember();
         Product wantedItem = productService.findById(id).get();
 
-        if(cartService.hasItem(buyer, wantedItem)){
-            return "redirect:/product/"+id+"?errorMsg=" + Ut.url.encode("이미 장바구니에 담은 상품입니다.");
+        if(cartService.hasItem(wantedItem)){
+            return Rq.redirectWithErrorMsg("/product/"+id, "이미 장바구니에 담은 상품입니다.");
         }
 
         CartItem addItem = cartService.addItem(buyer, wantedItem);
 
-        model.addAttribute("items", addItem);
+//        model.addAttribute("items", addItem);
 
         return Rq.redirectWithMsg("/cart/list", "%s이 장바구니에 담겼습니다.".formatted(wantedItem.getSubject()));
     }
@@ -74,6 +74,6 @@ public class CartController {
                     }
                 });
 
-        return "redirect:/cart/list?msg=" + Ut.url.encode("%d건의 품목을 삭제하였습니다.".formatted(idsArr.length));
+        return Rq.redirectWithMsg("/cart/list", "%d건의 품목을 삭제하였습니다.".formatted(idsArr.length));
     }
 }

@@ -90,6 +90,10 @@ public class Rq {
         return Ut.url.encode(msg) + ";ttl=" + new Date().getTime();
     }
 
+    public static String redirectWithErrorMsg(String url, String errorMsg) {
+        return "redirect:" + urlWithErrorMsg(url, errorMsg);
+    }
+
     public String redirectWithErrorMsg(String url, RsData rsData) {
         url = Ut.url.modifyQueryParam(url, "errorMsg", msgWithTtl(rsData.getMsg()));
 
