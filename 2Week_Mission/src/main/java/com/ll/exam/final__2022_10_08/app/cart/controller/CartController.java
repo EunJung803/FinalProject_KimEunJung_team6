@@ -40,7 +40,7 @@ public class CartController {
         return "cart/list";
     }
 
-    @GetMapping("/add/{id}")
+    @PostMapping("/add/{id}")
     @PreAuthorize("isAuthenticated()")
     public String addItems(@PathVariable Long id, @AuthenticationPrincipal MemberContext memberContext, Model model) {
         Member buyer = memberContext.getMember();
@@ -52,7 +52,7 @@ public class CartController {
 
         CartItem addItem = cartService.addItem(buyer, wantedItem);
 
-        model.addAttribute("items", addItem);
+//        model.addAttribute("items", addItem);
 
         return Rq.redirectWithMsg("/cart/list", "%s이 장바구니에 담겼습니다.".formatted(wantedItem.getSubject()));
     }
