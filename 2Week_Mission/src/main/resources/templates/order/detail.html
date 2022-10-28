@@ -71,12 +71,18 @@
                                    type="checkbox" class="ml-2 checkbox">
                         </label>
                     </div>
-                    <button th:if="${order.payable}" onclick="payment();" class="btn btn-sm btn-primary">카드결제</button>
-                    <span th:if="${order.isPaid}">결제완료</span>
+                    <div class="my-3 flex gap-2">
+                        <form method="POST" th:action="@{|/order/${order.id}/cancel|}" class="inline-flex">
+                            <button onclick="return confirm('주문을 취소하시겠습니까?')" class="btn btn-sm btn-info">주문 취소</button>
+                        </form>
+
+                        <button th:if="${order.payable}" onclick="payment();" class="btn btn-sm btn-primary inline-flex">카드결제</button>
+                        <span th:if="${order.isPaid}">결제완료</span>
+                    </div>
                 </div>
                 <div>
                     <div>
-                        <span>PG결제가격 : </span>
+                        <span class="text-primary">PG결제가격 : </span>
                         <span id="PaymentForm__pgPayPriceDisplay">
 
                         </span>

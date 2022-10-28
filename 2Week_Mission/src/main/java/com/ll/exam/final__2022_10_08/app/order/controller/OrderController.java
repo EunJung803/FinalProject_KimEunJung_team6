@@ -193,4 +193,22 @@ public class OrderController {
 
         return Rq.redirectWithMsg("/order/%d?msg=".formatted(order.getId()), "예치금으로 결제했습니다.");
     }
+
+    /**
+     * 주문 취소
+     */
+    @PostMapping("/{id}/cancel")
+    @PreAuthorize("isAuthenticated()")
+    public String cancelOrder(@PathVariable Long id, @AuthenticationPrincipal MemberContext memberContext) {
+        Member member = memberContext.getMember();
+        Order order = orderService.findForPrintById(id).get();
+
+        if (orderService.actorCanSee(member, order) == false) {
+            throw new ActorCanNotSeeOrderException();
+        }
+
+        orderService.cancelOrder(order);
+
+        return Rq.redirectWithMsg("/cart/list","%d번 주문이 취소되었습니다.".formatted(order.getId()));
+    }
 }

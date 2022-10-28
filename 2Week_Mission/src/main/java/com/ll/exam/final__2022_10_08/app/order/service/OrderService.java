@@ -135,4 +135,9 @@ public class OrderService {
     public List<Order> getOrderList(Member buyer) {
         return orderRepository.findAllByBuyerId(buyer.getId());
     }
+
+    @Transactional
+    public void cancelOrder(Order order) {
+        orderRepository.delete(order);
+    }
 }
