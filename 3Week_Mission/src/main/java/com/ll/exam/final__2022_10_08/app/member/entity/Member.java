@@ -30,6 +30,8 @@ public class Member extends BaseEntity {
     private boolean emailVerified;
     private long restCash;
     private String nickname;
+    @Setter
+    private int authLevel;
 
     public String getName() {
         if (nickname != null) {
@@ -49,11 +51,16 @@ public class Member extends BaseEntity {
 
     public List<GrantedAuthority> genAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
+
         authorities.add(new SimpleGrantedAuthority("MEMBER"));
 
         // 닉네임을 가지고 있다면 작가의 권한을 가진다.
         if (StringUtils.hasText(nickname)) {
             authorities.add(new SimpleGrantedAuthority("AUTHOR"));
+        }
+
+        if (authLevel == 7) {
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
         }
 
         return authorities;
