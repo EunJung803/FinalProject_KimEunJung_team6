@@ -59,6 +59,7 @@ public class Member extends BaseEntity {
             authorities.add(new SimpleGrantedAuthority("AUTHOR"));
         }
 
+        // authLevel의 값이 7이라면 관리자 권한을 가진다.
         if (authLevel == 7) {
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
         }
