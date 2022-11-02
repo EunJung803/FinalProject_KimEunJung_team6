@@ -34,7 +34,6 @@ public class AdmRebateController {
 
         rebateService.makeDate(yearMonth);
 
-//        return "redirect:/adm/rebate/rebateOrderItemList?yearMonth=" + yearMonth + "&msg=" + Ut.url.encode("정산데이터가 성공적으로 생성되었습니다.");
         return Rq.redirectWithMsg("/adm/rebate/rebateOrderItemList", "%s월 정산데이터가 성공적으로 생성되었습니다.".formatted(yearMonth));
     }
 
@@ -42,7 +41,7 @@ public class AdmRebateController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showRebateOrderItemList(String yearMonth, Model model) {
         if (yearMonth == null) {
-            yearMonth = "2022-10";
+            yearMonth = "2022-11";
         }
 
         List<RebateOrderItem> items = rebateService.findRebateOrderItemsByPayDateIn(yearMonth);
