@@ -36,7 +36,6 @@ public class AdmRebateController {
 
         RsData makeDateRsData = rebateService.makeDate(yearMonth);
 
-//        return Rq.redirectWithMsg("/adm/rebate/rebateOrderItemList", "%s월 정산데이터가 성공적으로 생성되었습니다.".formatted(yearMonth));
         String redirect = makeDateRsData.addMsgToUrl("redirect:/adm/rebate/rebateOrderItemList?yearMonth=" + yearMonth);
 
         return redirect;

@@ -94,7 +94,7 @@ public class Rq {
         return "redirect:" + urlWithErrorMsg(url, errorMsg);
     }
 
-    public String redirectWithErrorMsg(String url, RsData rsData) {
+    public static String redirectWithErrorMsg(String url, RsData rsData) {
         url = Ut.url.modifyQueryParam(url, "errorMsg", msgWithTtl(rsData.getMsg()));
 
         return "redirect:" + url;

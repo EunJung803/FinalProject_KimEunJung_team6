@@ -2,6 +2,7 @@ package com.ll.exam.final__2022_10_08.app.order.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ll.exam.final__2022_10_08.app.base.dto.RsData;
 import com.ll.exam.final__2022_10_08.app.base.rq.Rq;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import com.ll.exam.final__2022_10_08.app.member.service.MemberService;
@@ -43,6 +44,7 @@ public class OrderController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper;
     private final MemberService memberService;
+    private final Rq rq;
 
     /**
      * 주문 상세
@@ -50,8 +52,14 @@ public class OrderController {
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@AuthenticationPrincipal MemberContext memberContext, @PathVariable long id, Model model) {
-        Order order = orderService.findForPrintById(id).get();
+        Order order = orderService.findForPrintById(id).orElse(null);
+
+        if (order == null) {
+            return rq.redirectToBackWithMsg("주문을 찾을 수 없습니다.");
+        }
+
         Member actor = memberContext.getMember();
+
         long restCash = memberService.getRestCash(actor);
 
         if (orderService.actorCanSee(actor, order) == false) {
@@ -70,11 +78,14 @@ public class OrderController {
      */
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String makeOrder(@AuthenticationPrincipal MemberContext memberContext) {
+    public String create(@AuthenticationPrincipal MemberContext memberContext) {
         Member member = memberContext.getMember();
         Order order = orderService.createFromCart(member);
 
-        return "redirect:/order/%d".formatted(order.getId()) + "?msg=" + Ut.url.encode("%d번 주문이 생성되었습니다.".formatted(order.getId()));
+        return Rq.redirectWithMsg(
+                "/order/%d".formatted(order.getId()),
+                "%d번 주문이 생성되었습니다.".formatted(order.getId())
+        );
     }
 
 
@@ -83,12 +94,10 @@ public class OrderController {
      */
     @GetMapping("/list")
     @PreAuthorize("isAuthenticated()")
-    public String showOrderList(@AuthenticationPrincipal MemberContext memberContext, Model model) {
-        Member member = memberContext.getMember();  // buyer 정보
-        List<Order> orders = orderService.getOrderList(member);
+    public String showList(Model model) {
+        List<Order> orders = orderService.findAllByBuyerId(rq.getId());
 
         model.addAttribute("orders", orders);
-
         return "order/list";
     }
 
@@ -197,18 +206,30 @@ public class OrderController {
     /**
      * 주문 취소
      */
-    @PostMapping("/{id}/cancel")
+    @PostMapping("/{orderId}/cancel")
     @PreAuthorize("isAuthenticated()")
-    public String cancelOrder(@PathVariable Long id, @AuthenticationPrincipal MemberContext memberContext) {
-        Member member = memberContext.getMember();
-        Order order = orderService.findForPrintById(id).get();
+    public String cancel(@PathVariable Long orderId) {
+        RsData rsData = orderService.cancel(orderId, rq.getMember());
 
-        if (orderService.actorCanSee(member, order) == false) {
-            throw new ActorCanNotSeeOrderException();
+        if (rsData.isFail()) {
+            return Rq.redirectWithErrorMsg("/order/%d".formatted(orderId), rsData);
         }
 
-        orderService.cancelOrder(order);
+        return Rq.redirectWithMsg("/order/%d".formatted(orderId), rsData);
+    }
 
-        return Rq.redirectWithMsg("/cart/list","%d번 주문이 취소되었습니다.".formatted(order.getId()));
+    /**
+     * 환불
+     */
+    @PostMapping("/{orderId}/refund")
+    @PreAuthorize("isAuthenticated()")
+    public String refund(@PathVariable Long orderId) {
+        RsData rsData = orderService.refund(orderId, rq.getMember());
+
+        if (rsData.isFail()) {
+            return Rq.redirectWithErrorMsg("/order/%d".formatted(orderId), rsData);
+        }
+
+        return Rq.redirectWithMsg("/order/%d".formatted(orderId), rsData);
     }
 }

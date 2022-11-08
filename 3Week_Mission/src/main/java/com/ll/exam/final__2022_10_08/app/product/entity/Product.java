@@ -1,5 +1,6 @@
 package com.ll.exam.final__2022_10_08.app.product.entity;
 
+import com.ll.exam.final__2022_10_08.app.AppConfig;
 import com.ll.exam.final__2022_10_08.app.base.entity.BaseEntity;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import com.ll.exam.final__2022_10_08.app.postkeyword.entity.PostKeyword;
@@ -39,7 +40,7 @@ public class Product extends BaseEntity {
     }
 
     public int getWholesalePrice() {
-        return (int) Math.ceil(getPrice() * 0.5);   // 5 대 5로 정산
+        return (int) Math.ceil(getPrice() * AppConfig.getWholesalePriceRate());   // 5 대 5로 정산
     }
 
     public boolean isOrderable() {

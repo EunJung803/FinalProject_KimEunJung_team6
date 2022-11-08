@@ -1,5 +1,6 @@
 package com.ll.exam.final__2022_10_08.app.mybook.entity;
 
+
 import com.ll.exam.final__2022_10_08.app.base.entity.BaseEntity;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import com.ll.exam.final__2022_10_08.app.order.entity.OrderItem;
@@ -23,10 +24,13 @@ import static javax.persistence.FetchType.LAZY;
 @ToString(callSuper = true)
 public class MyBook extends BaseEntity {
     @ManyToOne(fetch = LAZY)
-    @ToString.Exclude
-    private Member buyer;
+    private Member owner;
 
     @ManyToOne(fetch = LAZY)
     @ToString.Exclude
     private Product product;
+
+    @ManyToOne(fetch = LAZY)
+    @ToString.Exclude
+    private OrderItem orderItem;
 }
