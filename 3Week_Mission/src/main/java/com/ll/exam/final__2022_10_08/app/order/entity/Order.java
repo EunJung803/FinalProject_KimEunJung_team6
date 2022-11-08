@@ -1,5 +1,6 @@
 package com.ll.exam.final__2022_10_08.app.order.entity;
 
+
 import com.ll.exam.final__2022_10_08.app.base.entity.BaseEntity;
 import com.ll.exam.final__2022_10_08.app.member.entity.Member;
 import lombok.*;
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,10 @@ import static javax.persistence.FetchType.LAZY;
 @ToString(callSuper = true)
 @Table(name = "product_order")
 public class Order extends BaseEntity {
+    private LocalDateTime refundDate;
+    private LocalDateTime payDate;
+    private LocalDateTime cancelDate;
+
     @ManyToOne(fetch = LAZY)
     private Member buyer;
 
@@ -43,16 +49,21 @@ public class Order extends BaseEntity {
     }
 
     public int calculatePayPrice() {
-        int payPrice = 0;
+        return orderItems
+                .stream()
+                .mapToInt(orderItem -> orderItem.getSalePrice())
+                .sum();
+    }
 
-        for (OrderItem orderItem : orderItems) {
-            payPrice += orderItem.getSalePrice();
-        }
+    public void setCancelDone() {
+        cancelDate = LocalDateTime.now();
 
-        return payPrice;
+        isCanceled = true;
     }
 
     public void setPaymentDone() {
+        payDate = LocalDateTime.now();
+
         for (OrderItem orderItem : orderItems) {
             orderItem.setPaymentDone();
         }
@@ -61,6 +72,8 @@ public class Order extends BaseEntity {
     }
 
     public void setRefundDone() {
+        refundDate = LocalDateTime.now();
+
         for (OrderItem orderItem : orderItems) {
             orderItem.setRefundDone();
         }
@@ -69,12 +82,10 @@ public class Order extends BaseEntity {
     }
 
     public int getPayPrice() {
-        int payPrice = 0;
-        for (OrderItem orderItem : orderItems) {
-            payPrice += orderItem.getPayPrice();
-        }
-
-        return payPrice;
+        return orderItems
+                .stream()
+                .mapToInt(orderItem -> orderItem.getPayPrice())
+                .sum();
     }
 
     public void makeName() {

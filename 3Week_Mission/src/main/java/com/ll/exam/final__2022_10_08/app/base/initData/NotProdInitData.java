@@ -53,6 +53,7 @@ public class NotProdInitData {
 
             Member member1 = memberService.join("user1", "1234", "user1@test.com", null);
             Member member2 = memberService.join("user2", "1234", "user2@test.com", "홍길순");
+            Member member3 = memberService.join("user3", "1234", "user3@test.com", null);
 
             postService.write(
                     member1,
@@ -92,28 +93,32 @@ public class NotProdInitData {
             Product product3 = productService.create(member1, "상품명3", 50_000, "REACT", "#IT #REACT");
             Product product4 = productService.create(member2, "상품명4", 60_000, "HTML", "#IT #HTML");
 
-            CartItem cartItem1 = cartService.addItem(member1, product2);
+//            CartItem cartItem1 = cartService.addItem(member1, product2);
 
             memberService.addCash(member1, 10_000, "충전__무통장입금");
             memberService.addCash(member1, 20_000, "충전__무통장입금");
             memberService.addCash(member1, -5_000, "출금__일반");
             memberService.addCash(member1, 1_000_000, "충전__무통장입금");
-//
-//            memberService.addCash(member2, 2_000_000, "충전__무통장입금");
 
-            /*
+            memberService.addCash(member2, 2_000_000, "충전__무통장입금");
+
+
             // 주문 생성 데이터
 
             // 1번 주문 : 결제완료
-            Order order1 = helper.order(member1, Arrays.asList(
-                            product1,
-                            product2
-                    )
-            );
+            Order order1 = helper.order(member1, Arrays.asList(product2));
 
             int order1PayPrice = order1.calculatePayPrice();
             orderService.payByRestCashOnly(order1);
 
+            // 2번 주문 : 결제완료
+            Order order2 = helper.order(member2, Arrays.asList(product1, product3));
+
+            int order2PayPrice = order1.calculatePayPrice();
+            orderService.payByRestCashOnly(order2);
+
+
+            /* 그 외 주문들
             // 2번 주문 : 결제 후 환불
             Order order2 = helper.order(member2, Arrays.asList(
                             product3,
