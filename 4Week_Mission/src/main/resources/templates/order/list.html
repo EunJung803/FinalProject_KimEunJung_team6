@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>주문 목록</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-write container mx-auto">
+
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg">내 주문목록</h1>
+
+            <div class="mt-2 grid grid-cols-1">
+            <table class="flex table text-center">
+
+                <thead class="table-dark">
+                <tr>
+                    <th>주문번호</th>
+                    <th>주문상품</th>
+                    <th>주문날짜</th>
+                    <th>주문가격</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.id}"></td>
+                    <td th:each="orderItem : ${order.orderItems}">
+                        <a th:href="@{/order/{id}(id = ${order.id})}">
+                            <span th:text="${orderItem.product.subject}" th:id="${order.id}" class="text-primary"></span>
+                        </a>
+                    </td>
+                    <td th:text="${#temporals.format(order.modifyDate, 'yy-MM-dd HH:mm')}"></td>
+                    <td th:text="${order.calculatePayPrice}"></td>
+                </tr>
+                </tbody>
+
+            </table>
+            </div>
+
+            <!-- 주문 내역 없으면 띄움 -->
+            <div th:if="${orders.size()} == 0">
+                <div class="my-3" style="text-align: start">
+                    <span class="h6">주문 내역이 없습니다.</span>
+                </div>
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+</body>
+</html>
